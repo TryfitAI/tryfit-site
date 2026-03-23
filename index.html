@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>TryFit AI</title>
+<title>Dresyn AI</title>
 
 <style>
 body {
@@ -24,15 +24,16 @@ header {
 }
 
 .logo-text {
-  font-size:34px;
+  font-size:36px;
   font-weight:bold;
   margin-top:10px;
+
   background: linear-gradient(90deg, #00ffcc, #00aaff, #a100ff);
   -webkit-background-clip: text;
   color: transparent;
 }
 
-/* HERO MAIS JUNTO */
+/* HERO */
 .hero {
   padding:20px 20px 40px;
 }
@@ -48,9 +49,9 @@ header {
   margin-bottom:20px;
 }
 
-/* BOTÃO GRANDE */
+/* BOTÃO */
 .btn {
-  padding:18px 45px;
+  padding:18px 50px;
   background:#00ffcc;
   border:none;
   border-radius:10px;
@@ -86,13 +87,20 @@ header {
   background:#111;
   padding:30px;
   border-radius:15px;
-  width:180px;
+  width:200px;
   box-shadow:0 0 25px rgba(0,255,204,0.3);
+  transition:0.3s;
+}
+
+.card:hover {
+  transform:translateY(-5px);
+  box-shadow:0 0 40px rgba(0,255,204,0.6);
 }
 
 .card h3 {
   color:#00ffcc;
-  font-size:36px;
+  font-size:38px;
+  margin:0;
 }
 
 .card p {
@@ -117,8 +125,14 @@ header {
 }
 
 .logos img {
-  height:70px;
+  height:80px;
   opacity:0.9;
+  transition:0.3s;
+}
+
+.logos img:hover {
+  transform:scale(1.1);
+  opacity:1;
 }
 
 /* FOOTER */
@@ -134,7 +148,7 @@ footer {
 
 <header>
   <img src="logo.png" class="logo">
-  <div class="logo-text">TRYFIT AI</div>
+  <div class="logo-text">DRESYN AI</div>
 </header>
 
 <section class="hero">
@@ -177,7 +191,7 @@ footer {
 </section>
 
 <footer>
-© 2026 TryFit AI
+© 2026 Dresyn AI
 </footer>
 
 <script>
