@@ -1,67 +1,32 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-<meta charset="UTF-8">
-<title>TryFit AI</title>
-<style>
-body {margin:0;font-family:Arial;background:radial-gradient(circle at top,#111,#000);color:white;}
-header {display:flex;flex-direction:column;align-items:center;padding:20px;}
-header img {height:70px;}
-.logo-text {font-size:28px;margin-top:10px;font-weight:bold;background:linear-gradient(90deg,#00ffcc,#00aaff,#a100ff);-webkit-background-clip:text;color:transparent;}
-.hero {text-align:center;padding:100px 20px;}
-.hero h2 {font-size:42px;background:linear-gradient(90deg,#00ffcc,#00aaff);-webkit-background-clip:text;color:transparent;}
-.hero p {color:#aaa;font-size:20px;}
-.btn {margin-top:30px;padding:15px 35px;background:#00ffcc;color:black;border:none;font-size:16px;cursor:pointer;border-radius:8px;}
-.stats {display:flex;justify-content:center;gap:60px;padding:60px 20px;}
-.stat h3 {font-size:40px;color:#00ffcc;}
-.demo {text-align:center;padding:60px 20px;background:#0a0a0a;}
-img.preview {margin-top:20px;max-width:300px;border-radius:10px;}
-footer {text-align:center;padding:30px;color:#666;}
-</style>
-</head>
-<body>
-
-<header>
-<img src="logo.png">
-<div class="logo-text">TRYFIT AI</div>
-</header>
-
 <section class="hero">
-<h2>Aumente suas vendas com tecnologia provador virtual</h2>
-<p>Seus clientes vendo a roupa no próprio corpo antes de comprar</p>
+  <h2>Aumente suas vendas com tecnologia provador virtual</h2>
+  <p>Seus clientes vendo a roupa no próprio corpo antes de comprar</p>
 
-<a href="https://wa.me/5511999999999" target="_blank">
-<button class="btn">Quero essa tecnologia</button>
-</a>
-</section>
-
-<section class="stats">
-<div class="stat">
-<h3>+30%</h3>
-<p>Aumento nas vendas</p>
-</div>
-<div class="stat">
-<h3>-40%</h3>
-<p>Redução de trocas</p>
-</div>
+  <a href="https://wa.me/5511999999999" target="_blank">
+    <button class="btn">Falar no WhatsApp</button>
+  </a>
 </section>
 
 <section class="demo">
-<h2>Veja funcionando</h2>
-<input type="file" id="upload"><br>
-<button class="btn" onclick="previewImage()">Testar agora</button><br>
-<img id="preview" class="preview">
+  <h2>Veja funcionando</h2>
+
+  <input type="file" id="upload" />
+  <br>
+
+  <button class="btn" onclick="previewImage()">Testar agora</button>
+
+  <br>
+  <img id="preview" class="preview">
 </section>
 
-<footer>© 2026 TryFit AI</footer>
+<section class="stats">
+  <div class="stat">
+    <h3>+30%</h3>
+    <p>Conversão de vendas</p>
+  </div>
 
-<script>
-function previewImage(){
-const file=document.getElementById("upload").files[0];
-const preview=document.getElementById("preview");
-if(file){preview.src=URL.createObjectURL(file);}
-}
-</script>
-
-</body>
-</html>
+  <div class="stat">
+    <h3>-40%</h3>
+    <p>Menos trocas de produtos</p>
+  </div>
+</section>
