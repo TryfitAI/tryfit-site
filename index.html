@@ -13,21 +13,34 @@ body {
   text-align:center;
 }
 
+/* HEADER */
 header {
-  padding:20px;
+  padding:40px 20px;
 }
 
-header img {
-  height:80px;
+.logo {
+  height:120px;
+  filter: drop-shadow(0 0 10px #00ffcc);
 }
 
+.logo-text {
+  font-size:34px;
+  font-weight:bold;
+  margin-top:10px;
+
+  background: linear-gradient(90deg, #00ffcc, #00aaff, #a100ff);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* HERO */
 .hero {
   padding:60px 20px;
 }
 
 .hero h2 {
   color:#00ffcc;
-  font-size:32px;
+  font-size:34px;
 }
 
 .hero p {
@@ -36,27 +49,86 @@ header img {
 
 .btn {
   margin-top:20px;
-  padding:15px 30px;
+  padding:15px 35px;
   background:#00ffcc;
   border:none;
-  border-radius:6px;
+  border-radius:8px;
   cursor:pointer;
+  font-weight:bold;
 }
 
+/* DEMO */
 .demo {
-  padding:50px 20px;
+  padding:60px 20px;
 }
 
+/* STATS */
 .stats {
   display:flex;
   justify-content:center;
-  gap:50px;
-  padding:40px;
+  gap:30px;
+  padding:60px 20px;
+  flex-wrap:wrap;
 }
 
-.stat h3 {
+.card {
+  background:#111;
+  padding:30px;
+  border-radius:15px;
+  width:180px;
+  box-shadow:0 0 20px rgba(0,255,204,0.2);
+  transition:0.3s;
+}
+
+.card:hover {
+  transform:translateY(-5px);
+  box-shadow:0 0 30px rgba(0,255,204,0.5);
+}
+
+.card h3 {
   color:#00ffcc;
-  font-size:30px;
+  font-size:36px;
+  margin:0;
+}
+
+.card p {
+  color:#aaa;
+  margin-top:10px;
+}
+
+/* CLIENTES */
+.clientes {
+  padding:60px 20px;
+}
+
+.clientes h2 {
+  margin-bottom:30px;
+}
+
+.logos {
+  display:flex;
+  justify-content:center;
+  gap:40px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.logos img {
+  height:70px;
+  filter: grayscale(100%);
+  opacity:0.8;
+  transition:0.3s;
+}
+
+.logos img:hover {
+  filter:none;
+  opacity:1;
+}
+
+/* FOOTER */
+footer {
+  padding:40px;
+  color:#666;
 }
 </style>
 
@@ -65,8 +137,8 @@ header img {
 <body>
 
 <header>
-  <img src="logo.png">
-  <h2>TRYFIT AI</h2>
+  <img src="logo.png" class="logo">
+  <h1 class="logo-text">TRYFIT AI</h1>
 </header>
 
 <section class="hero">
@@ -89,16 +161,28 @@ header img {
 </section>
 
 <section class="stats">
-  <div class="stat">
+  <div class="card">
     <h3>+30%</h3>
-    <p>Conversão</p>
+    <p>Aumento de conversão</p>
   </div>
 
-  <div class="stat">
+  <div class="card">
     <h3>-40%</h3>
-    <p>Menos trocas</p>
+    <p>Redução de trocas</p>
   </div>
 </section>
+
+<section class="clientes">
+  <h2>Empresas que já utilizam</h2>
+
+  <div class="logos">
+    <img src="golpe.png">
+  </div>
+</section>
+
+<footer>
+© 2026 TryFit AI
+</footer>
 
 <script>
 function previewImage(){
