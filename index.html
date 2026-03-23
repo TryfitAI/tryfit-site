@@ -53,8 +53,8 @@ header {
 /* BOTÃO */
 .btn {
   padding:18px 30px;
-  max-width:300px;
   width:90%;
+  max-width:320px;
   background:#00ffcc;
   border:none;
   border-radius:10px;
@@ -83,24 +83,22 @@ header {
 /* STATS */
 .stats {
   display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:20px;
-  padding:40px 20px;
+  justify-content:center;
+  gap:15px;
+  padding:30px 15px;
 }
 
 .card {
   background:#111;
-  padding:25px;
+  padding:20px;
   border-radius:15px;
-  width:90%;
-  max-width:260px;
-  box-shadow:0 0 25px rgba(0,255,204,0.2);
+  width:45%;
+  box-shadow:0 0 25px rgba(0,255,204,0.3);
 }
 
 .card h3 {
   color:#00ffcc;
-  font-size:32px;
+  font-size:28px;
   margin:0;
 }
 
@@ -120,24 +118,9 @@ header {
   color:#00ffcc;
 }
 
-.logos {
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:40px;
-  margin-top:20px;
-}
-
 .logos img {
-  height:70px;
+  height:80px;
   object-fit:contain;
-  opacity:0.9;
-  transition:0.3s;
-}
-
-.logos img:hover {
-  transform:scale(1.05);
-  opacity:1;
 }
 
 /* FOOTER */
@@ -155,8 +138,11 @@ footer {
   }
 
   .stats {
-    flex-direction:row;
-    justify-content:center;
+    gap:30px;
+  }
+
+  .card {
+    width:200px;
   }
 
   .btn {
@@ -212,7 +198,7 @@ footer {
 
   <div class="logos">
     <img src="Golpe.png">
-    <img src="Travel.png">
+     <img src="Travel.png">
   </div>
 </section>
 
