@@ -2,6 +2,7 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dresyn AI</title>
 
 <style>
@@ -15,19 +16,18 @@ body {
 
 /* HEADER */
 header {
-  padding:30px 20px 10px;
+  padding:20px;
 }
 
 .logo {
-  height:120px;
+  height:90px;
   filter: drop-shadow(0 0 15px #00ffcc);
 }
 
 .logo-text {
-  font-size:36px;
+  font-size:26px;
   font-weight:bold;
   margin-top:10px;
-
   background: linear-gradient(90deg, #00ffcc, #00aaff, #a100ff);
   -webkit-background-clip: text;
   color: transparent;
@@ -35,72 +35,67 @@ header {
 
 /* HERO */
 .hero {
-  padding:20px 20px 40px;
+  padding:20px;
 }
 
 .hero h2 {
+  font-size:22px;
   color:#00ffcc;
-  font-size:32px;
-  margin-bottom:10px;
+  line-height:1.4;
 }
 
 .hero p {
+  font-size:14px;
   color:#aaa;
-  margin-bottom:20px;
 }
 
 /* BOTÃO */
 .btn {
-  padding:18px 50px;
+  padding:16px 25px;
+  width:90%;
+  max-width:320px;
   background:#00ffcc;
   border:none;
   border-radius:10px;
-  cursor:pointer;
   font-weight:bold;
   font-size:16px;
-  transition:0.3s;
-}
-
-.btn:hover {
-  transform:scale(1.05);
+  margin-top:15px;
 }
 
 /* DEMO */
 .demo {
-  padding:60px 20px;
+  padding:30px 20px;
 }
 
 .demo h2 {
   color:#00ffcc;
 }
 
+#upload {
+  width:100%;
+}
+
 /* STATS */
 .stats {
   display:flex;
-  justify-content:center;
-  gap:30px;
-  padding:40px 20px;
-  flex-wrap:wrap;
+  flex-direction:column;
+  align-items:center;
+  gap:20px;
+  padding:30px 20px;
 }
 
 .card {
   background:#111;
-  padding:30px;
-  border-radius:15px;
-  width:200px;
-  box-shadow:0 0 25px rgba(0,255,204,0.3);
-  transition:0.3s;
-}
-
-.card:hover {
-  transform:translateY(-5px);
-  box-shadow:0 0 40px rgba(0,255,204,0.6);
+  padding:20px;
+  border-radius:12px;
+  width:90%;
+  max-width:300px;
+  box-shadow:0 0 20px rgba(0,255,204,0.2);
 }
 
 .card h3 {
   color:#00ffcc;
-  font-size:38px;
-  margin:0;
+  font-size:28px;
 }
 
 .card p {
@@ -109,36 +104,52 @@ header {
 
 /* CLIENTES */
 .clientes {
-  padding:60px 20px;
-}
-
-.clientes h2 {
-  color:#00ffcc;
-}
-
-.logos {
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:40px;
-  margin-top:30px;
+  padding:30px 20px;
 }
 
 .logos img {
-  height:80px;
-  opacity:0.9;
-  transition:0.3s;
-}
-
-.logos img:hover {
-  transform:scale(1.1);
-  opacity:1;
+  height:70px;
+  background:#111;
+  padding:10px;
+  border-radius:8px;
 }
 
 /* FOOTER */
 footer {
-  padding:40px;
-  color:#666;
+  padding:30px 20px;
+  font-size:13px;
+  color:#aaa;
+}
+
+/* DESKTOP */
+@media(min-width:768px){
+
+  .logo {
+    height:120px;
+  }
+
+  .logo-text {
+    font-size:36px;
+  }
+
+  .hero h2 {
+    font-size:34px;
+  }
+
+  .hero p {
+    font-size:16px;
+  }
+
+  .stats {
+    flex-direction:row;
+    justify-content:center;
+  }
+
+  .btn {
+    width:auto;
+    padding:18px 50px;
+  }
+
 }
 </style>
 
@@ -167,7 +178,7 @@ footer {
 
   <button class="btn" onclick="previewImage()">Testar agora</button><br>
 
-  <img id="preview" style="max-width:300px;margin-top:20px;">
+  <img id="preview" style="max-width:100%; margin-top:20px;">
 </section>
 
 <section class="stats">
@@ -186,15 +197,13 @@ footer {
   <h2>Empresas que já utilizam</h2>
 
   <div class="logos">
-   <img src="Golpe.png" style="height:80px;">
+    <img src="Golpe.png">
   </div>
 </section>
 
 <footer>
-<section style="padding:40px 20px; color:#aaa; font-size:14px;">
-  <p><strong> © 2026 Tecnologia exclusiva Dresyn AI</strong></p>
+  <p><strong>© 2026 Tecnologia exclusiva Dresyn AI</strong></p>
   <p>Sistema proprietário com proteção intelectual e patente.</p>
-</section>
 </footer>
 
 <script>
