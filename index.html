@@ -1,3 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>TryFit AI</title>
+
+<style>
+body {
+  margin:0;
+  font-family:Arial;
+  background:#000;
+  color:white;
+  text-align:center;
+}
+
+header {
+  padding:20px;
+}
+
+header img {
+  height:80px;
+}
+
+.hero {
+  padding:60px 20px;
+}
+
+.hero h2 {
+  color:#00ffcc;
+  font-size:32px;
+}
+
+.hero p {
+  color:#aaa;
+}
+
+.btn {
+  margin-top:20px;
+  padding:15px 30px;
+  background:#00ffcc;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.demo {
+  padding:50px 20px;
+}
+
+.stats {
+  display:flex;
+  justify-content:center;
+  gap:50px;
+  padding:40px;
+}
+
+.stat h3 {
+  color:#00ffcc;
+  font-size:30px;
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+  <img src="logo.png">
+  <h2>TRYFIT AI</h2>
+</header>
+
 <section class="hero">
   <h2>Aumente suas vendas com tecnologia provador virtual</h2>
   <p>Seus clientes vendo a roupa no próprio corpo antes de comprar</p>
@@ -10,23 +81,35 @@
 <section class="demo">
   <h2>Veja funcionando</h2>
 
-  <input type="file" id="upload" />
-  <br>
+  <input type="file" id="upload"><br>
 
-  <button class="btn" onclick="previewImage()">Testar agora</button>
+  <button class="btn" onclick="previewImage()">Testar agora</button><br>
 
-  <br>
-  <img id="preview" class="preview">
+  <img id="preview" style="max-width:300px;margin-top:20px;">
 </section>
 
 <section class="stats">
   <div class="stat">
     <h3>+30%</h3>
-    <p>Conversão de vendas</p>
+    <p>Conversão</p>
   </div>
 
   <div class="stat">
     <h3>-40%</h3>
-    <p>Menos trocas de produtos</p>
+    <p>Menos trocas</p>
   </div>
 </section>
+
+<script>
+function previewImage(){
+  const file = document.getElementById("upload").files[0];
+  const preview = document.getElementById("preview");
+
+  if(file){
+    preview.src = URL.createObjectURL(file);
+  }
+}
+</script>
+
+</body>
+</html>
