@@ -66,18 +66,26 @@ header {
   padding:40px 20px;
 }
 
-.stats {
+/* CLIENTES */
+.clientes {
+  padding:40px 20px;
+}
+
+.logos {
   display:flex;
   justify-content:center;
   gap:15px;
-  padding:30px 15px;
+  flex-wrap:wrap;
 }
 
-.card {
-  background:#111;
-  padding:20px;
-  border-radius:15px;
-  width:45%;
+.logos img {
+  height:50px; /* 🔥 menor no celular */
+}
+
+@media(min-width:768px){
+  .logos img {
+    height:80px;
+  }
 }
 
 footer {
@@ -128,36 +136,36 @@ z-index:999;
   <br><br>
 
   <button class="btn" onclick="testarProvador()">
-    Ver como ficou em mim 
+    Ver como ficou em mim
   </button>
 
-  <div id="loading" style="display:none; color:#00ffcc;">Processando IA...</div>
+  <div id="loading" style="display:none; color:#00ffcc;">
+    🔄 Gerando sua imagem... pode levar alguns segundos
+  </div>
 
   <img id="resultImage" style="max-width:100%; margin-top:20px; display:none; border-radius:10px;">
 
 </section>
 
-<footer>
-        <section class="clientes">
+<section class="clientes">
   <h2>Empresas que já utilizam</h2>
 
   <div class="logos">
-<img src="Golpe.png">
-<img src="Travel.png">
+    <img src="Golpe.png">
+    <img src="Travel.png">
+  </div>
+</section>
 
-    <footer>
+<footer>
   <p><strong>© 2026 Tecnologia exclusiva Dresyn AI</strong></p>
   <p>Sistema proprietário com proteção intelectual e patente.</p>
 </footer>
-
-</script>
-  </div>
 
 <!-- MODAL -->
 <div id="leadModal">
   <div style="background:#111; padding:30px; border-radius:15px; width:90%; max-width:350px;">
 
-    <h2 style="color:#00ffcc;"> Quase pronto!</h2>
+    <h2 style="color:#00ffcc;">Quase pronto!</h2>
 
     <p style="color:#aaa;">
       Veja como ficou em você e receba sua simulação exclusiva
@@ -208,9 +216,9 @@ async function testarProvador() {
 
         if (data.image) {
             window.imagemGerada = data.image;
-
-            // abre o modal
             document.getElementById('leadModal').style.display = 'flex';
+        } else {
+            alert("Erro da IA");
         }
 
     } catch (error) {
@@ -228,8 +236,6 @@ function liberarImagem() {
         return;
     }
 
-    salvarLead(contato);
-
     const img = document.getElementById('resultImage');
     img.src = window.imagemGerada;
     img.style.display = 'block';
@@ -237,23 +243,7 @@ function liberarImagem() {
     document.getElementById('leadModal').style.display = 'none';
 }
 
-function salvarLead(contato) {
-    fetch("https://glpofficial-api.onrender.com/api/lead", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            contato: contato,
-            origem: "provador_virtual",
-            data: new Date()
-        })
-    });
-
-    console.log("Lead capturado:", contato);
-}
-
-
+</script>
 
 </body>
 </html>
