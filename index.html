@@ -7,20 +7,14 @@
 <title>Dresyn AI</title>
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+
 body {
     font-family: 'Montserrat', sans-serif;
     margin: 0;
-    padding: 0;
     background-color: #000;
     color: white;
-}
-body {
-  margin:0;
-  font-family:Arial;
-  background:#000;
-  color:white;
-  text-align:center;
+    text-align:center;
 }
 
 /* HEADER */
@@ -50,13 +44,11 @@ header {
 .hero h2 {
   color:#00ffcc;
   font-size:28px;
-  margin-bottom:10px;
   line-height:1.4;
 }
 
 .hero p {
   color:#aaa;
-  margin-bottom:20px;
 }
 
 /* BOTÃO */
@@ -69,27 +61,13 @@ header {
   border-radius:10px;
   cursor:pointer;
   font-weight:bold;
-  font-size:16px;
-  transition:0.3s;
-}
-
-.btn:hover {
-  transform:scale(1.05);
 }
 
 /* DEMO */
 .demo {
   padding:40px 20px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
 }
 
-.demo h2 {
-  color:#00ffcc;
-}
-
-/* STATS */
 .stats {
   display:flex;
   justify-content:center;
@@ -102,66 +80,21 @@ header {
   padding:20px;
   border-radius:15px;
   width:45%;
-  box-shadow:0 0 25px rgba(0,255,204,0.3);
 }
 
-.card h3 {
-  color:#00ffcc;
-  font-size:28px;
-  margin:0;
-}
-
-.card p {
-  color:#aaa;
-}
-
-/* CLIENTES */
 .clientes {
   padding:40px 20px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-}
-
-.clientes h2 {
-  color:#00ffcc;
 }
 
 .logos img {
   height:80px;
-  object-fit:contain;
 }
 
-/* FOOTER */
 footer {
-  padding:30px 20px;
+  padding:30px;
   color:#aaa;
-  font-size:13px;
-}
-
-/* DESKTOP */
-@media(min-width:768px){
-
-  .hero h2 {
-    font-size:34px;
-  }
-
-  .stats {
-    gap:30px;
-  }
-
-  .card {
-    width:200px;
-  }
-
-  .btn {
-    width:auto;
-    padding:18px 50px;
-  }
-
 }
 </style>
-
 </head>
 
 <body>
@@ -181,25 +114,26 @@ footer {
 </section>
 
 <section class="demo">
+
   <h2>Veja funcionando</h2>
-  
-  <div class="upload-area">
-    <p>1. Foto do Produto:</p>
-    <input type="file" id="personImage" accept="image/*">
-    
-    <p>2. Sua Foto:</p>
-    <input type="file" id="clothingImage" accept="image/*">
-  </div>
 
-  <br>
-  <button class="btn" onclick="testarProvador()">Gerar Provador Virtual</button>
-  <br>
+  <p>1. Foto do Produto:</p>
+  <input type="file" id="clothingImage" accept="image/*">
 
-  <div id="loading" style="display:none; color: #00ffcc; margin-top: 10px;">Processando com IA... aguarde.</div>
+  <p>2. Sua Foto:</p>
+  <input type="file" id="personImage" accept="image/*">
 
-  <img id="resultImage" style="max-width:100%; margin-top:20px; border-radius: 10px; box-shadow: 0 0 20px rgba(0,255,204,0.3); display:none;">
+  <br><br>
 
-  <!-- NOVA PARTE (CAPTURA DE LEAD) -->
+  <button class="btn" onclick="testarProvador()">
+    Gerar Provador Virtual
+  </button>
+
+  <div id="loading" style="display:none; color:#00ffcc;">Processando com IA...</div>
+
+  <img id="resultImage" style="max-width:100%; margin-top:20px; display:none; border-radius:10px;">
+
+  <!-- CAPTURA -->
   <div id="liberarArea" style="display:none; margin-top:20px;">
     <input 
       type="text" 
@@ -210,7 +144,7 @@ footer {
     <br><br>
 
     <button class="btn" onclick="liberarResultado()">
-      Ver resultado 
+      Ver resultado 🔥
     </button>
   </div>
 
@@ -239,18 +173,19 @@ footer {
 
 <footer>
   <p><strong>© 2026 Tecnologia exclusiva Dresyn AI</strong></p>
-  <p>Sistema proprietário com proteção intelectual e patente.</p>
 </footer>
 
 <script>
 async function testarProvador() {
+
     const personFile = document.getElementById('personImage').files[0];
     const clothingFile = document.getElementById('clothingImage').files[0];
+
     const resultImg = document.getElementById('resultImage');
     const loading = document.getElementById('loading');
 
     if (!personFile || !clothingFile) {
-        alert("Por favor, selecione as duas imagens: a sua foto e a foto da peça!");
+        alert("Envie as duas imagens!");
         return;
     }
 
@@ -258,6 +193,8 @@ async function testarProvador() {
     resultImg.style.display = 'none';
 
     const formData = new FormData();
+
+    // 🔥 CORREÇÃO AQUI
     formData.append('model', personFile);
     formData.append('item', clothingFile);
 
@@ -267,37 +204,40 @@ async function testarProvador() {
             body: formData
         });
 
-        const data = await response.json();
+        const text = await response.text();
+        console.log("Resposta API:", text);
+
+        const data = JSON.parse(text);
 
         if (data.image) {
             window.imagemGerada = data.image;
 
-            // 🔥 NÃO mostra a imagem ainda
             document.getElementById('liberarArea').style.display = 'block';
-        } else if (data.error) {
-            alert("Erro na IA: " + data.error);
+        } else {
+            alert("Erro da IA: " + (data.error || "sem resposta"));
         }
+
     } catch (error) {
-        console.error("Erro na conexão:", error);
-        alert("Não foi possível conectar ao servidor do provador.");
-    } finally {
-        loading.style.display = 'none';
+        console.error(error);
+        alert("Erro ao gerar imagem");
     }
+
+    loading.style.display = 'none';
 }
 
 function liberarResultado() {
     const contato = document.getElementById('contato').value;
 
     if (!contato) {
-        alert("Digite seu WhatsApp ou Email");
+        alert("Digite seu contato");
         return;
     }
 
     console.log("Lead capturado:", contato);
 
-    const resultImg = document.getElementById('resultImage');
-    resultImg.src = window.imagemGerada;
-    resultImg.style.display = 'block';
+    const img = document.getElementById('resultImage');
+    img.src = window.imagemGerada;
+    img.style.display = 'block';
 
     document.getElementById('liberarArea').style.display = 'none';
 }
