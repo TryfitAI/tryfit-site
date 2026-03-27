@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
@@ -7,20 +6,14 @@
 <title>Dresyn AI</title>
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+
 body {
     font-family: 'Montserrat', sans-serif;
     margin: 0;
-    padding: 0;
-    background-color: #000; /* Garante o fundo preto */
-    color: white;
-}
-body {
-  margin:0;
-  font-family:Arial;
-  background:#000;
-  color:white;
-  text-align:center;
+    background:#000;
+    color:white;
+    text-align:center;
 }
 
 /* HEADER */
@@ -50,13 +43,10 @@ header {
 .hero h2 {
   color:#00ffcc;
   font-size:28px;
-  margin-bottom:10px;
-  line-height:1.4;
 }
 
 .hero p {
   color:#aaa;
-  margin-bottom:20px;
 }
 
 /* BOTÃO */
@@ -69,27 +59,13 @@ header {
   border-radius:10px;
   cursor:pointer;
   font-weight:bold;
-  font-size:16px;
-  transition:0.3s;
-}
-
-.btn:hover {
-  transform:scale(1.05);
 }
 
 /* DEMO */
 .demo {
   padding:40px 20px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
 }
 
-.demo h2 {
-  color:#00ffcc;
-}
-
-/* STATS */
 .stats {
   display:flex;
   justify-content:center;
@@ -102,66 +78,27 @@ header {
   padding:20px;
   border-radius:15px;
   width:45%;
-  box-shadow:0 0 25px rgba(0,255,204,0.3);
 }
 
-.card h3 {
-  color:#00ffcc;
-  font-size:28px;
-  margin:0;
-}
-
-.card p {
-  color:#aaa;
-}
-
-/* CLIENTES */
-.clientes {
-  padding:40px 20px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-}
-
-.clientes h2 {
-  color:#00ffcc;
-}
-
-.logos img {
-  height:80px;
-  object-fit:contain;
-}
-
-/* FOOTER */
 footer {
-  padding:30px 20px;
+  padding:30px;
   color:#aaa;
-  font-size:13px;
 }
 
-/* DESKTOP */
-@media(min-width:768px){
-
-  .hero h2 {
-    font-size:34px;
-  }
-
-  .stats {
-    gap:30px;
-  }
-
-  .card {
-    width:200px;
-  }
-
-  .btn {
-    width:auto;
-    padding:18px 50px;
-  }
-
+/* MODAL */
+#leadModal {
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.9);
+justify-content:center;
+align-items:center;
+z-index:999;
 }
 </style>
-
 </head>
 
 <body>
@@ -172,87 +109,80 @@ footer {
 </header>
 
 <section class="hero">
-  <h2>Aumente suas vendas em até 30% com provador virtual inteligente</h2>
-  <p>Seus clientes vendo a roupa no próprio corpo antes de comprar</p>
-
-  <a href="https://wa.me/5511942785956" target="_blank">
-    <button class="btn">Quero aumentar minhas vendas</button>
-  </a>
+  <h2>Aumente suas vendas com provador virtual inteligente</h2>
+  <p>Veja a roupa no seu corpo antes de comprar</p>
 </section>
 
 <section class="demo">
-  <h2>Veja funcionando</h2>
-  
-  <div class="upload-area">
-    <p>1. Foto do Produto:</p>
-    <input type="file" id="personImage" accept="image/*">
-    
-    <p>2. Sua Foto:</p>
-    <input type="file" id="clothingImage" accept="image/*">
-  </div>
 
-  <br>
-  <button class="btn" onclick="testarProvador()">Gerar Provador Virtual</button>
-  <br>
+  <p>1. Foto do Produto:</p>
+  <input type="file" id="clothingImage" accept="image/*">
 
-  <div id="loading" style="display:none; color: #00ffcc; margin-top: 10px;">Processando com IA... aguarde.</div>
-  <img id="resultImage" style="max-width:100%; margin-top:20px; border-radius: 10px; box-shadow: 0 0 20px rgba(0,255,204,0.3);">
-</section>
+  <p>2. Sua Foto:</p>
+  <input type="file" id="personImage" accept="image/*">
 
+  <br><br>
 
-<section class="stats">
-  <div class="card">
-    <h3>+30%</h3>
-    <p>Aumento de conversão</p>
-  </div>
+  <button class="btn" onclick="testarProvador()">
+    Ver como ficou em mim 🔥
+  </button>
 
-  <div class="card">
-    <h3>-40%</h3>
-    <p>Redução de trocas</p>
-  </div>
-</section>
+  <div id="loading" style="display:none; color:#00ffcc;">Processando IA...</div>
 
-<section class="clientes">
-  <h2>Empresas que já utilizam</h2>
+  <img id="resultImage" style="max-width:100%; margin-top:20px; display:none; border-radius:10px;">
 
-  <div class="logos">
-<img src="Golpe.png">
-<img src="Travel.png">
-
-
-  </div>
 </section>
 
 <footer>
-  <p><strong>© 2026 Tecnologia exclusiva Dresyn AI</strong></p>
-  <p>Sistema proprietário com proteção intelectual e patente.</p>
+  <p>© 2026 Dresyn AI</p>
 </footer>
 
+<!-- MODAL -->
+<div id="leadModal">
+  <div style="background:#111; padding:30px; border-radius:15px; width:90%; max-width:350px;">
+
+    <h2 style="color:#00ffcc;">🔥 Quase pronto!</h2>
+
+    <p style="color:#aaa;">
+      Veja como ficou em você e receba sua simulação exclusiva
+    </p>
+
+    <input 
+      type="text" 
+      id="leadContato" 
+      placeholder="Seu e-mail ou WhatsApp"
+      style="width:100%; padding:12px; border-radius:8px; border:none;"
+    >
+
+    <p style="font-size:12px; color:#777;">
+      Ao continuar, você concorda em receber comunicações.
+    </p>
+
+    <button class="btn" onclick="liberarImagem()">
+      Ver resultado 🔥
+    </button>
+
+  </div>
+</div>
+
 <script>
+
 async function testarProvador() {
     const personFile = document.getElementById('personImage').files[0];
     const clothingFile = document.getElementById('clothingImage').files[0];
-    const resultImg = document.getElementById('resultImage');
-    const loading = document.getElementById('loading');
 
-    // 1. Validação: Verifica se o usuário enviou as duas fotos
     if (!personFile || !clothingFile) {
-        alert("Por favor, selecione as duas imagens: a sua foto e a foto da peça!");
+        alert("Envie as duas imagens!");
         return;
     }
 
-    // 2. Visual: Mostra o texto de carregamento e esconde imagem anterior
-    loading.style.display = 'block';
-    resultImg.style.display = 'none';
+    document.getElementById('loading').style.display = 'block';
 
-    // 3. Preparação: Cria o formulário para enviar os arquivos
     const formData = new FormData();
-    formData.append('model', personFile); // 'model' é o nome que seu backend espera
-    formData.append('item', clothingFile);  // 'item' é o nome da peça no seu backend
+    formData.append('model', personFile);
+    formData.append('item', clothingFile);
 
     try {
-        // 4. Envio: Conecta com a API que você enviou no .zip
-        // IMPORTANTE: Se o seu servidor estiver rodando no Render, use a URL deles
         const response = await fetch('https://glpofficial-api.onrender.com/api/tryon', {
             method: 'POST',
             body: formData
@@ -261,19 +191,50 @@ async function testarProvador() {
         const data = await response.json();
 
         if (data.image) {
-            // 5. Resultado: Exibe a imagem gerada pela IA
-            resultImg.src = data.image; // O seu backend já retorna em base64
-            resultImg.style.display = 'block';
-        } else if (data.error) {
-            alert("Erro na IA: " + data.error);
+            window.imagemGerada = data.image;
+
+            // abre o modal
+            document.getElementById('leadModal').style.display = 'flex';
         }
+
     } catch (error) {
-        console.error("Erro na conexão:", error);
-        alert("Não foi possível conectar ao servidor do provador.");
-    } finally {
-        // 6. Finalização: Remove o aviso de "Processando..."
-        loading.style.display = 'none';
+        alert("Erro ao gerar imagem");
     }
+
+    document.getElementById('loading').style.display = 'none';
+}
+
+function liberarImagem() {
+    const contato = document.getElementById('leadContato').value;
+
+    if (!contato) {
+        alert("Digite seu contato");
+        return;
+    }
+
+    salvarLead(contato);
+
+    const img = document.getElementById('resultImage');
+    img.src = window.imagemGerada;
+    img.style.display = 'block';
+
+    document.getElementById('leadModal').style.display = 'none';
+}
+
+function salvarLead(contato) {
+    fetch("https://glpofficial-api.onrender.com/api/lead", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            contato: contato,
+            origem: "provador_virtual",
+            data: new Date()
+        })
+    });
+
+    console.log("Lead capturado:", contato);
 }
 
 </script>
