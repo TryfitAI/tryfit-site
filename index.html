@@ -9,11 +9,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
 
 body {
-    font-family: 'Montserrat', sans-serif;
-    margin: 0;
-    background:#000;
-    color:white;
-    text-align:center;
+  font-family: 'Montserrat', sans-serif;
+  margin:0;
+  background:#000;
+  color:white;
+  text-align:center;
 }
 
 /* HEADER */
@@ -43,6 +43,7 @@ header {
 .hero h2 {
   color:#00ffcc;
   font-size:28px;
+  line-height:1.4;
 }
 
 .hero p {
@@ -59,6 +60,11 @@ header {
   border-radius:10px;
   cursor:pointer;
   font-weight:bold;
+  transition:0.3s;
+}
+
+.btn:hover {
+  transform:scale(1.05);
 }
 
 /* DEMO */
@@ -78,11 +84,15 @@ header {
   padding:20px;
   border-radius:15px;
   width:45%;
+  box-shadow:0 0 25px rgba(0,255,204,0.3);
 }
 
-footer {
-  padding:30px;
-  color:#aaa;
+.clientes {
+  padding:40px 20px;
+}
+
+.logos img {
+  height:80px;
 }
 
 /* MODAL */
@@ -109,11 +119,17 @@ z-index:999;
 </header>
 
 <section class="hero">
-  <h2>Aumente suas vendas com provador virtual inteligente</h2>
-  <p>Veja a roupa no seu corpo antes de comprar</p>
+  <h2>Aumente suas vendas em até 30% com provador virtual inteligente</h2>
+  <p>Seus clientes vendo a roupa no próprio corpo antes de comprar</p>
+
+  <a href="https://wa.me/5511942785956" target="_blank">
+    <button class="btn">Falar no WhatsApp</button>
+  </a>
 </section>
 
 <section class="demo">
+
+  <h2>Teste agora</h2>
 
   <p>1. Foto do Produto:</p>
   <input type="file" id="clothingImage" accept="image/*">
@@ -124,17 +140,38 @@ z-index:999;
   <br><br>
 
   <button class="btn" onclick="testarProvador()">
-    Ver como ficou em mim 
+    Ver como ficou em mim 🔥
   </button>
 
-  <div id="loading" style="display:none; color:#00ffcc;">Processando IA...</div>
+  <div id="loading" style="display:none; color:#00ffcc;">Processando com IA...</div>
 
   <img id="resultImage" style="max-width:100%; margin-top:20px; display:none; border-radius:10px;">
 
 </section>
 
+<section class="stats">
+  <div class="card">
+    <h3>+30%</h3>
+    <p>Aumento de conversão</p>
+  </div>
+
+  <div class="card">
+    <h3>-40%</h3>
+    <p>Redução de trocas</p>
+  </div>
+</section>
+
+<section class="clientes">
+  <h2>Empresas que já utilizam</h2>
+
+  <div class="logos">
+    <img src="Golpe.png">
+    <img src="Travel.png">
+  </div>
+</section>
+
 <footer>
-  <p>© 2026 Dresyn AI</p>
+  <p><strong>© 2026 Dresyn AI</strong></p>
 </footer>
 
 <!-- MODAL -->
@@ -159,7 +196,7 @@ z-index:999;
     </p>
 
     <button class="btn" onclick="liberarImagem()">
-      Ver resultado
+      Ver resultado 🔥
     </button>
 
   </div>
@@ -169,7 +206,7 @@ z-index:999;
 
 async function testarProvador() {
     const personFile = document.getElementById('personImage').files[0];
-    const clothingFile = document.getElementById('clothingImage').files[0];
+    const clothingFile = document.getElementById('clothingImage').files[0'];
 
     if (!personFile || !clothingFile) {
         alert("Envie as duas imagens!");
@@ -192,8 +229,6 @@ async function testarProvador() {
 
         if (data.image) {
             window.imagemGerada = data.image;
-
-            // abre o modal
             document.getElementById('leadModal').style.display = 'flex';
         }
 
