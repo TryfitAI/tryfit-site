@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dresyn AI — Provador Virtual</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,300&display=swap" rel="stylesheet">
-
+ 
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+ 
   :root {
     --bg:         #000000;
     --surface:    #0d0d0d;
@@ -25,9 +25,9 @@
     --font:       'Montserrat', sans-serif;
     --transition: 220ms cubic-bezier(0.4, 0, 0.2, 1);
   }
-
+ 
   html { scroll-behavior: smooth; }
-
+ 
   body {
     font-family: var(--font);
     background: var(--bg);
@@ -35,561 +35,373 @@
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }
-
+ 
   /* ─── ANIMATIONS ─────────────────────────────────────────── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-  }
-  @keyframes pulse-dot {
-    0%, 100% { opacity: 1; }
-    50%       { opacity: 0.3; }
-  }
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-  @keyframes modalIn {
-    from { opacity: 0; transform: scale(0.96) translateY(8px); }
-    to   { opacity: 1; transform: scale(1) translateY(0); }
-  }
-
-  .animate-1 { animation: fadeUp 0.6s var(--transition) both; }
-  .animate-2 { animation: fadeUp 0.6s 0.1s var(--transition) both; }
-  .animate-3 { animation: fadeUp 0.6s 0.2s var(--transition) both; }
-  .animate-4 { animation: fadeUp 0.6s 0.3s var(--transition) both; }
-  .animate-5 { animation: fadeUp 0.6s 0.4s var(--transition) both; }
-
+  @keyframes fadeUp { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  @keyframes modalIn { from { opacity:0; transform:scale(0.96) translateY(8px); } to { opacity:1; transform:scale(1) translateY(0); } }
+  @keyframes glowPulse { 0%,100% { box-shadow:0 0 20px rgba(0,255,204,0.12); } 50% { box-shadow:0 0 40px rgba(0,255,204,0.32); } }
+  @keyframes shimmer { 0% { background-position:-200% center; } 100% { background-position:200% center; } }
+  @keyframes borderGlow { 0%,100% { border-color:#1f1f1f; } 50% { border-color:rgba(0,255,204,0.35); } }
+  @keyframes orb1 { 0%,100% { transform:translate(0,0) scale(1); } 33% { transform:translate(30px,-20px) scale(1.05); } 66% { transform:translate(-20px,10px) scale(0.95); } }
+  @keyframes orb2 { 0%,100% { transform:translate(0,0) scale(1); } 33% { transform:translate(-25px,15px) scale(0.95); } 66% { transform:translate(20px,-10px) scale(1.05); } }
+  @keyframes tickerScroll { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
+  @keyframes pulse-dot { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+ 
+  .animate-1 { animation: fadeUp 0.7s var(--transition) both; }
+  .animate-2 { animation: fadeUp 0.7s 0.1s var(--transition) both; }
+  .animate-3 { animation: fadeUp 0.7s 0.2s var(--transition) both; }
+  .animate-4 { animation: fadeUp 0.7s 0.3s var(--transition) both; }
+  .animate-5 { animation: fadeUp 0.7s 0.4s var(--transition) both; }
+ 
+  .reveal { opacity:0; transform:translateY(32px); transition:opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+ 
+  /* ─── BG ORBS ─────────────────────────────────────────────── */
+  .bg-orb { position:fixed; border-radius:50%; filter:blur(80px); pointer-events:none; z-index:0; }
+  .bg-orb-1 { width:420px; height:420px; background:radial-gradient(circle, rgba(0,255,204,0.07) 0%, transparent 70%); top:-100px; right:-100px; animation:orb1 12s ease-in-out infinite; }
+  .bg-orb-2 { width:360px; height:360px; background:radial-gradient(circle, rgba(161,0,255,0.06) 0%, transparent 70%); bottom:20%; left:-80px; animation:orb2 15s ease-in-out infinite; }
+ 
   /* ─── HEADER ────────────────────────────────────────────── */
-  header {
-    padding: 28px 24px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--border);
-    animation: fadeIn 0.5s ease both;
-  }
-
-  .logo-group {
-    display: flex;
-    align-items: center;
-  }
-
-  .logo-img {
-    height: 36px;
-    width: auto;
-    display: block;
-  }
-
-  .badge {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    color: var(--primary);
-    border: 1px solid var(--primary);
-    padding: 4px 10px;
-    border-radius: 100px;
-    text-transform: uppercase;
-    opacity: 0.8;
-  }
-
+  header { padding:28px 24px 24px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); animation:fadeIn 0.5s ease both; position:relative; z-index:10; }
+  .logo-group { display:flex; align-items:center; }
+  .logo-img { height:36px; width:auto; display:block; }
+  .nav-links { display:flex; gap:24px; align-items:center; }
+  .nav-link { font-size:12px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); text-decoration:none; transition:color var(--transition); }
+  .nav-link:hover { color:var(--primary); }
+ 
+  /* ─── TICKER ─────────────────────────────────────────────── */
+  .ticker-wrap { overflow:hidden; border-bottom:1px solid var(--border); background:var(--surface); padding:10px 0; position:relative; z-index:5; }
+  .ticker-track { display:flex; width:max-content; animation:tickerScroll 32s linear infinite; }
+  .ticker-item { display:flex; align-items:center; gap:8px; padding:0 40px; font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-dim); white-space:nowrap; }
+  .ticker-dot { width:4px; height:4px; border-radius:50%; background:var(--primary); flex-shrink:0; }
+ 
   /* ─── HERO ───────────────────────────────────────────────── */
-  .hero {
-    padding: 56px 24px 48px;
-    max-width: 480px;
-    margin: 0 auto;
-    text-align: left;
-  }
-
-  .hero-eyebrow {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--primary);
-    margin-bottom: 18px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .hero-eyebrow::before {
-    content: '';
-    display: block;
-    width: 20px;
-    height: 1px;
-    background: var(--primary);
-    flex-shrink: 0;
-  }
-
-  .hero h1 {
-    font-size: clamp(28px, 7vw, 40px);
-    font-weight: 900;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-    color: var(--text);
-    margin-bottom: 16px;
-  }
-
-  .hero h1 em {
-    font-style: normal;
-    color: var(--primary);
-  }
-
-  .hero p {
-    font-size: 15px;
-    font-weight: 400;
-    color: var(--text-muted);
-    line-height: 1.6;
-  }
-
-  /* ─── DEMO SECTION ───────────────────────────────────────── */
-  .demo {
-    padding: 0 24px 48px;
-    max-width: 480px;
-    margin: 0 auto;
-  }
-
-  .upload-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 16px;
-  }
-
-  .upload-zone {
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 24px 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    transition: border-color var(--transition), background var(--transition);
-    background: var(--surface);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .upload-zone:hover {
-    border-color: var(--primary);
-    background: var(--surface-2);
-  }
-
-  .upload-zone.has-file {
-    border-color: var(--primary);
-  }
-
-  .upload-zone input[type="file"] {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    cursor: pointer;
-    width: 100%;
-    height: 100%;
-  }
-
-  .upload-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: border-color var(--transition);
-  }
-
-  .upload-zone:hover .upload-icon,
-  .upload-zone.has-file .upload-icon {
-    border-color: var(--primary);
-  }
-
-  .upload-label {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    text-align: center;
-    line-height: 1.4;
-  }
-
-  .upload-zone.has-file .upload-label { color: var(--primary); }
-
-  .upload-preview {
-    position: absolute;
-    inset: 0;
-    object-fit: cover;
-    border-radius: var(--radius);
-    opacity: 0;
-    transition: opacity var(--transition);
-    pointer-events: none;
-  }
-
-  .upload-zone.has-file .upload-preview { opacity: 0.25; }
-
+  .hero { padding:64px 24px 48px; max-width:480px; margin:0 auto; position:relative; z-index:5; }
+  .hero-eyebrow { font-size:11px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--primary); margin-bottom:18px; display:flex; align-items:center; gap:8px; }
+  .hero-eyebrow::before { content:''; display:block; width:20px; height:1px; background:var(--primary); flex-shrink:0; }
+  .hero h1 { font-size:clamp(28px,7vw,42px); font-weight:900; line-height:1.1; letter-spacing:-0.02em; color:var(--text); margin-bottom:20px; }
+  .hero h1 em { font-style:normal; background:linear-gradient(90deg, var(--primary), var(--secondary), var(--primary)); background-size:200% auto; -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; animation:shimmer 3s linear infinite; }
+  .hero p { font-size:15px; font-weight:400; color:var(--text-muted); line-height:1.65; margin-bottom:28px; }
+  .hero-tags { display:flex; flex-wrap:wrap; gap:8px; }
+  .hero-tag { font-size:11px; font-weight:600; letter-spacing:0.08em; color:var(--text-muted); border:1px solid var(--border); border-radius:100px; padding:6px 12px; display:flex; align-items:center; gap:6px; transition:border-color var(--transition), color var(--transition); }
+  .hero-tag:hover { border-color:var(--primary); color:var(--primary); }
+  .hero-tag-dot { width:5px; height:5px; border-radius:50%; background:var(--primary); animation:pulse-dot 2s ease infinite; }
+ 
+  /* ─── DEMO ───────────────────────────────────────────────── */
+  .demo { padding:0 24px 48px; max-width:480px; margin:0 auto; position:relative; z-index:5; }
+  .upload-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+  .upload-zone { border:1px solid var(--border); border-radius:var(--radius); padding:24px 16px; display:flex; flex-direction:column; align-items:center; gap:10px; cursor:pointer; transition:border-color var(--transition), background var(--transition), transform var(--transition); background:var(--surface); position:relative; overflow:hidden; }
+  .upload-zone:hover { border-color:var(--primary); background:var(--surface-2); transform:translateY(-2px); }
+  .upload-zone.has-file { border-color:var(--primary); animation:glowPulse 3s ease infinite; }
+  .upload-zone input[type="file"] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+  .upload-icon { width:40px; height:40px; border-radius:50%; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; transition:border-color var(--transition), background var(--transition); }
+  .upload-zone:hover .upload-icon, .upload-zone.has-file .upload-icon { border-color:var(--primary); background:rgba(0,255,204,0.05); }
+  .upload-label { font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-muted); text-align:center; line-height:1.4; }
+  .upload-zone.has-file .upload-label { color:var(--primary); }
+  .upload-preview { position:absolute; inset:0; object-fit:cover; border-radius:var(--radius); opacity:0; transition:opacity var(--transition); pointer-events:none; }
+  .upload-zone.has-file .upload-preview { opacity:0.28; }
+ 
   /* ─── BUTTON ─────────────────────────────────────────────── */
-  .btn-primary {
-    width: 100%;
-    padding: 16px;
-    background: var(--primary);
-    color: #000;
-    border: none;
-    border-radius: var(--radius);
-    font-family: var(--font);
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: opacity var(--transition), transform var(--transition);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-  }
-
-  .btn-primary:hover { opacity: 0.88; }
-  .btn-primary:active { transform: scale(0.98); }
-  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
-
-  /* ─── LOADING ────────────────────────────────────────────── */
-  #loading {
-    display: none;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 20px 0;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--primary);
-    letter-spacing: 0.04em;
-  }
-
-  .spinner {
-    width: 16px;
-    height: 16px;
-    border: 2px solid var(--border);
-    border-top-color: var(--primary);
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    flex-shrink: 0;
-  }
-
-  /* ─── RESULT ─────────────────────────────────────────────── */
-  #resultWrapper {
-    display: none;
-    margin-top: 20px;
-    border-radius: var(--radius);
-    overflow: hidden;
-    border: 1px solid var(--border);
-    animation: fadeIn 0.5s ease both;
-  }
-
-  #resultImage {
-    width: 100%;
-    display: block;
-  }
-
-  /* ─── DIVIDER ────────────────────────────────────────────── */
-  .divider {
-    height: 1px;
-    background: var(--border);
-    margin: 0 24px;
-  }
-
+  .btn-primary { width:100%; padding:16px; background:var(--primary); color:#000; border:none; border-radius:var(--radius); font-family:var(--font); font-size:14px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; transition:opacity var(--transition), transform var(--transition), box-shadow var(--transition); display:flex; align-items:center; justify-content:center; gap:8px; position:relative; overflow:hidden; }
+  .btn-primary::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%); transform:translateX(-100%); transition:transform 0.5s ease; }
+  .btn-primary:hover::after { transform:translateX(100%); }
+  .btn-primary:hover { opacity:0.9; box-shadow:0 0 30px rgba(0,255,204,0.28); }
+  .btn-primary:active { transform:scale(0.98); }
+  .btn-primary:disabled { opacity:0.4; cursor:not-allowed; }
+ 
+  /* ─── LOADING / RESULT ───────────────────────────────────── */
+  #loading { display:none; align-items:center; justify-content:center; gap:10px; padding:24px 0; font-size:13px; font-weight:500; color:var(--primary); letter-spacing:0.04em; }
+  .spinner { width:18px; height:18px; border:2px solid var(--border); border-top-color:var(--primary); border-radius:50%; animation:spin 0.7s linear infinite; flex-shrink:0; }
+  #resultWrapper { display:none; margin-top:20px; border-radius:var(--radius); overflow:hidden; border:1px solid var(--primary); animation:fadeIn 0.5s ease both; box-shadow:0 0 40px rgba(0,255,204,0.15); }
+  #resultImage { width:100%; display:block; }
+ 
+  /* ─── DIVIDER ─────────────────────────────────────────────── */
+  .divider { height:1px; background:var(--border); margin:0 24px; }
+ 
+  /* ─── SECTIONS ───────────────────────────────────────────── */
+  .section { padding:64px 24px; max-width:480px; margin:0 auto; position:relative; z-index:5; }
+  .section-eyebrow { font-size:11px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--primary); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+  .section-eyebrow::before { content:''; display:block; width:16px; height:1px; background:var(--primary); flex-shrink:0; }
+  .section-title { font-size:clamp(22px,5vw,30px); font-weight:900; letter-spacing:-0.02em; line-height:1.15; margin-bottom:36px; }
+  .section-title span { color:var(--primary); }
+ 
+  /* ─── STEPS ──────────────────────────────────────────────── */
+  .steps { display:flex; flex-direction:column; }
+  .step { display:flex; gap:20px; padding:24px 0; border-bottom:1px solid var(--border); }
+  .step:last-child { border-bottom:none; }
+  .step-num { width:36px; height:36px; border-radius:50%; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:var(--primary); flex-shrink:0; transition:border-color var(--transition), background var(--transition), box-shadow var(--transition); }
+  .step:hover .step-num { border-color:var(--primary); background:rgba(0,255,204,0.05); box-shadow:0 0 16px rgba(0,255,204,0.2); }
+  .step-content h3 { font-size:14px; font-weight:700; margin-bottom:6px; }
+  .step-content p { font-size:13px; color:var(--text-muted); line-height:1.6; }
+ 
+  /* ─── FEATURES ───────────────────────────────────────────── */
+  .features-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .feature-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:24px 20px; transition:border-color var(--transition), transform var(--transition), box-shadow var(--transition); }
+  .feature-card:hover { border-color:rgba(0,255,204,0.3); transform:translateY(-4px); box-shadow:0 12px 40px rgba(0,0,0,0.4); }
+  .feature-icon { width:40px; height:40px; border-radius:10px; background:rgba(0,255,204,0.07); border:1px solid rgba(0,255,204,0.14); display:flex; align-items:center; justify-content:center; margin-bottom:16px; transition:background var(--transition); }
+  .feature-card:hover .feature-icon { background:rgba(0,255,204,0.13); }
+  .feature-title { font-size:13px; font-weight:700; margin-bottom:8px; }
+  .feature-desc { font-size:12px; color:var(--text-muted); line-height:1.55; }
+ 
   /* ─── STATS ──────────────────────────────────────────────── */
-  .stats {
-    padding: 48px 24px;
-    max-width: 480px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-
-  .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 24px 20px;
-    transition: border-color var(--transition);
-  }
-
-  .stat-card:hover { border-color: var(--text-dim); }
-
-  .stat-value {
-    font-size: 32px;
-    font-weight: 900;
-    color: var(--primary);
-    letter-spacing: -0.02em;
-    margin-bottom: 6px;
-    line-height: 1;
-  }
-
-  .stat-label {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-muted);
-    line-height: 1.4;
-  }
-
+  .stats { padding:64px 24px; max-width:480px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:12px; position:relative; z-index:5; }
+  .stat-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:28px 20px; transition:border-color var(--transition), transform var(--transition); animation:borderGlow 4s ease infinite; }
+  .stat-card:nth-child(2) { animation-delay:1s; } .stat-card:nth-child(3) { animation-delay:2s; } .stat-card:nth-child(4) { animation-delay:3s; }
+  .stat-card:hover { transform:translateY(-3px); border-color:rgba(0,255,204,0.35); animation:none; }
+  .stat-value { font-size:36px; font-weight:900; color:var(--primary); letter-spacing:-0.02em; margin-bottom:8px; line-height:1; }
+  .stat-label { font-size:12px; font-weight:500; color:var(--text-muted); line-height:1.4; }
+ 
+  /* ─── TESTIMONIALS ───────────────────────────────────────── */
+  .testimonials { padding:64px 24px; max-width:480px; margin:0 auto; position:relative; z-index:5; }
+  .testimonial-list { display:flex; flex-direction:column; gap:12px; margin-top:36px; }
+  .testimonial-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:24px; transition:border-color var(--transition), transform var(--transition); }
+  .testimonial-card:hover { border-color:rgba(0,255,204,0.2); transform:translateX(4px); }
+  .stars { display:flex; gap:3px; margin-bottom:12px; }
+  .star { color:var(--primary); font-size:12px; }
+  .testimonial-text { font-size:13px; color:var(--text-muted); line-height:1.65; margin-bottom:16px; font-style:italic; }
+  .testimonial-author { display:flex; align-items:center; gap:10px; }
+  .author-avatar { width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg, var(--primary), var(--accent)); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#000; flex-shrink:0; }
+  .author-name { font-size:12px; font-weight:700; }
+  .author-role { font-size:11px; color:var(--text-dim); margin-top:2px; }
+ 
+  /* ─── FAQ ────────────────────────────────────────────────── */
+  .faq { padding:64px 24px; max-width:480px; margin:0 auto; position:relative; z-index:5; }
+  .faq-list { margin-top:36px; }
+  .faq-item { border-bottom:1px solid var(--border); }
+  .faq-question { display:flex; justify-content:space-between; align-items:center; padding:20px 0; cursor:pointer; font-size:14px; font-weight:600; transition:color var(--transition); user-select:none; }
+  .faq-question:hover { color:var(--primary); }
+  .faq-icon { width:22px; height:22px; border:1px solid var(--border); border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:transform var(--transition), border-color var(--transition), background var(--transition), color var(--transition); font-size:15px; }
+  .faq-item.open .faq-icon { transform:rotate(45deg); border-color:var(--primary); background:rgba(0,255,204,0.08); color:var(--primary); }
+  .faq-answer { max-height:0; overflow:hidden; transition:max-height 0.4s ease, padding 0.3s ease; font-size:13px; color:var(--text-muted); line-height:1.65; }
+  .faq-item.open .faq-answer { max-height:200px; padding-bottom:20px; }
+ 
+  /* ─── CTA ────────────────────────────────────────────────── */
+  .cta-section { padding:72px 24px; max-width:480px; margin:0 auto; text-align:center; position:relative; z-index:5; }
+  .cta-glow { position:absolute; inset:0; background:radial-gradient(ellipse at center, rgba(0,255,204,0.06) 0%, transparent 70%); pointer-events:none; }
+  .cta-section h2 { font-size:clamp(22px,5vw,30px); font-weight:900; letter-spacing:-0.02em; line-height:1.15; margin-bottom:16px; }
+  .cta-section h2 span { color:var(--primary); }
+  .cta-section p { font-size:14px; color:var(--text-muted); line-height:1.6; margin-bottom:32px; }
+ 
   /* ─── CLIENTS ────────────────────────────────────────────── */
-  .clients {
-    padding: 0 24px 56px;
-    max-width: 480px;
-    margin: 0 auto;
-  }
-
-  .clients-label {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    margin-bottom: 20px;
-    text-align: center;
-  }
-
-  .client-logos {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 32px;
-  }
-
-  .client-logos img {
-    height: 56px;
-    width: auto;
-    opacity: 0.35;
-    transition: opacity var(--transition);
-  }
-
-  .client-logos img:hover { opacity: 0.6; }
-
+  .clients { padding:0 24px 64px; max-width:480px; margin:0 auto; position:relative; z-index:5; }
+  .clients-label { font-size:11px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-dim); margin-bottom:24px; text-align:center; }
+  .client-logos { display:flex; align-items:center; justify-content:center; gap:40px; }
+  .client-logos img { height:56px; width:auto; opacity:0.3; filter:grayscale(1); transition:opacity var(--transition), transform var(--transition), filter var(--transition); }
+  .client-logos img:hover { opacity:0.7; transform:scale(1.08); filter:grayscale(0); }
+ 
   /* ─── FOOTER ─────────────────────────────────────────────── */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 28px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .footer-copy {
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--text-dim);
-    letter-spacing: 0.04em;
-  }
-
-  .footer-patent {
-    font-size: 10px;
-    color: var(--text-dim);
-    letter-spacing: 0.06em;
-  }
-
+  footer { border-top:1px solid var(--border); padding:28px 24px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; position:relative; z-index:5; }
+  .footer-copy { font-size:11px; font-weight:500; color:var(--text-dim); letter-spacing:0.04em; }
+  .footer-links { display:flex; gap:16px; }
+  .footer-link { font-size:10px; color:var(--text-dim); letter-spacing:0.06em; text-decoration:none; text-transform:uppercase; transition:color var(--transition); }
+  .footer-link:hover { color:var(--primary); }
+ 
   /* ─── MODAL ──────────────────────────────────────────────── */
-  #leadModal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.85);
-    justify-content: center;
-    align-items: flex-end;
-    z-index: 999;
-    animation: fadeIn 0.2s ease both;
-    padding: 0 0 env(safe-area-inset-bottom, 0);
-  }
-
-  .modal-sheet {
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    border-radius: 20px 20px 0 0;
-    padding: 32px 24px 36px;
-    width: 100%;
-    max-width: 480px;
-    animation: modalIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
-  }
-
-  .modal-handle {
-    width: 36px;
-    height: 3px;
-    background: var(--border);
-    border-radius: 100px;
-    margin: 0 auto 28px;
-  }
-
-  .modal-title {
-    font-size: 20px;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    margin-bottom: 8px;
-  }
-
-  .modal-title span { color: var(--primary); }
-
-  .modal-desc {
-    font-size: 13px;
-    color: var(--text-muted);
-    line-height: 1.55;
-    margin-bottom: 24px;
-  }
-
-  .input-group { margin-bottom: 12px; }
-
-  .input-field {
-    width: 100%;
-    padding: 14px 16px;
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-family: var(--font);
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text);
-    outline: none;
-    transition: border-color var(--transition);
-  }
-
-  .input-field::placeholder { color: var(--text-muted); }
-  .input-field:focus { border-color: var(--primary); }
-
-  .modal-terms {
-    font-size: 11px;
-    color: var(--text-dim);
-    line-height: 1.5;
-    margin-bottom: 20px;
-    margin-top: 4px;
-  }
+  #leadModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.88); justify-content:center; align-items:flex-end; z-index:999; animation:fadeIn 0.25s ease both; backdrop-filter:blur(4px); }
+  .modal-sheet { background:var(--surface); border-top:1px solid var(--border); border-radius:20px 20px 0 0; padding:32px 24px 36px; width:100%; max-width:480px; animation:modalIn 0.35s cubic-bezier(0.4,0,0.2,1) both; }
+  .modal-handle { width:36px; height:3px; background:var(--border); border-radius:100px; margin:0 auto 28px; }
+  .modal-title { font-size:20px; font-weight:800; letter-spacing:-0.02em; margin-bottom:8px; }
+  .modal-title span { color:var(--primary); }
+  .modal-desc { font-size:13px; color:var(--text-muted); line-height:1.55; margin-bottom:24px; }
+  .input-group { margin-bottom:12px; }
+  .input-field { width:100%; padding:14px 16px; background:var(--surface-2); border:1px solid var(--border); border-radius:var(--radius-sm); font-family:var(--font); font-size:14px; font-weight:500; color:var(--text); outline:none; transition:border-color var(--transition), box-shadow var(--transition); }
+  .input-field::placeholder { color:var(--text-muted); }
+  .input-field:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(0,255,204,0.08); }
+  .modal-terms { font-size:11px; color:var(--text-dim); line-height:1.5; margin-bottom:20px; margin-top:4px; }
+ 
+  @media (max-width:400px) { .features-grid { grid-template-columns:1fr; } .nav-links { display:none; } }
 </style>
 </head>
 <body>
-
+ 
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+ 
 <!-- HEADER -->
 <header class="animate-1">
-  <div class="logo-group">
-    <img src="logo.png" alt="Dresyn AI" class="logo-img">
-  </div>
-  <span class="badge">Beta</span>
+  <div class="logo-group"><img src="logo.png" alt="Dresyn AI" class="logo-img"></div>
+  <nav class="nav-links">
+    <a href="#como-funciona" class="nav-link">Como funciona</a>
+    <a href="#recursos" class="nav-link">Recursos</a>
+  </nav>
 </header>
-
+ 
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <span class="ticker-item"><span class="ticker-dot"></span>Inteligência Artificial Generativa</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>+30% de conversão</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Tecnologia proprietária com patente</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Redução de 40% em trocas</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Integração em minutos</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Resultado em tempo real</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Inteligência Artificial Generativa</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>+30% de conversão</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Tecnologia proprietária com patente</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Redução de 40% em trocas</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Integração em minutos</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Resultado em tempo real</span>
+  </div>
+</div>
+ 
 <!-- HERO -->
 <section class="hero">
+  <p class="hero-eyebrow animate-1">Provador Virtual com IA</p>
   <h1 class="animate-2">Veja a roupa <em>no seu corpo</em> antes de comprar</h1>
-  <p class="animate-3">Tecnologia de IA que aumenta conversão e reduz trocas para o seu e-commerce.</p>
+  <p class="animate-3">Tecnologia de IA generativa que aumenta conversão, reduz trocas e transforma a experiência de compra do seu e-commerce.</p>
+  <div class="hero-tags animate-4">
+    <span class="hero-tag"><span class="hero-tag-dot"></span>Sem cadastro</span>
+    <span class="hero-tag"><span class="hero-tag-dot"></span>Resultado em segundos</span>
+    <span class="hero-tag"><span class="hero-tag-dot"></span>100% online</span>
+  </div>
 </section>
-
+ 
 <!-- DEMO -->
 <section class="demo animate-5">
-
   <div class="upload-grid">
     <div class="upload-zone" id="zoneClothing">
       <img class="upload-preview" id="previewClothing" src="" alt="">
-      <div class="upload-icon">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5" stroke-linecap="round">
-          <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
-        </svg>
-      </div>
+      <div class="upload-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
       <span class="upload-label">Foto do<br>produto</span>
       <input type="file" id="clothingImage" accept="image/*" onchange="handleFile(this, 'zoneClothing', 'previewClothing')">
     </div>
-
     <div class="upload-zone" id="zonePerson">
       <img class="upload-preview" id="previewPerson" src="" alt="">
-      <div class="upload-icon">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5" stroke-linecap="round">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-        </svg>
-      </div>
+      <div class="upload-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
       <span class="upload-label">Sua<br>foto</span>
       <input type="file" id="personImage" accept="image/*" onchange="handleFile(this, 'zonePerson', 'previewPerson')">
     </div>
   </div>
-
   <button class="btn-primary" onclick="testarProvador()" id="btnTryon">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
     Ver como fica em mim
   </button>
-
-  <div id="loading">
-    <div class="spinner"></div>
-    Processando com IA…
-  </div>
-
-  <div id="resultWrapper">
-    <img id="resultImage" src="" alt="Resultado do provador virtual">
-  </div>
-
+  <div id="loading"><div class="spinner"></div>Processando com IA…</div>
+  <div id="resultWrapper"><img id="resultImage" src="" alt="Resultado do provador virtual"></div>
 </section>
-
+ 
 <div class="divider"></div>
-
+ 
+<!-- COMO FUNCIONA -->
+<section class="section" id="como-funciona">
+  <p class="section-eyebrow reveal">Como funciona</p>
+  <h2 class="section-title reveal">Simples assim — <span>3 passos</span></h2>
+  <div class="steps">
+    <div class="step reveal"><div class="step-num">01</div><div class="step-content"><h3>Envie a foto da peça</h3><p>Faça o upload da imagem do produto — camiseta, vestido, jaqueta, qualquer roupa.</p></div></div>
+    <div class="step reveal"><div class="step-num">02</div><div class="step-content"><h3>Envie uma foto sua</h3><p>Uma foto simples serve. Nossa IA detecta automaticamente o corpo e a postura para um resultado fiel.</p></div></div>
+    <div class="step reveal"><div class="step-num">03</div><div class="step-content"><h3>Veja o resultado em segundos</h3><p>Nossa IA generativa combina as imagens e exibe como a roupa fica em você — com textura, cor e caimento reais.</p></div></div>
+  </div>
+</section>
+ 
+<div class="divider"></div>
+ 
+<!-- RECURSOS -->
+<section class="section" id="recursos">
+  <p class="section-eyebrow reveal">Tecnologia</p>
+  <h2 class="section-title reveal">Por que a <span>Dresyn AI</span></h2>
+  <div class="features-grid">
+    <div class="feature-card reveal"><div class="feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00ffcc" stroke-width="1.8" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div><div class="feature-title">IA Generativa</div><div class="feature-desc">Modelo de difusão treinado especificamente para moda e vestuário.</div></div>
+    <div class="feature-card reveal"><div class="feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00ffcc" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="feature-title">Tempo Real</div><div class="feature-desc">Resultado gerado em segundos, sem espera e sem instalar nada.</div></div>
+    <div class="feature-card reveal"><div class="feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00ffcc" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div class="feature-title">Privacidade</div><div class="feature-desc">Imagens processadas com segurança e não armazenadas após o uso.</div></div>
+    <div class="feature-card reveal"><div class="feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00ffcc" stroke-width="1.8" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="feature-title">Alta Precisão</div><div class="feature-desc">Preserva cor, textura e caimento originais da peça com fidelidade.</div></div>
+  </div>
+</section>
+ 
+<div class="divider"></div>
+ 
 <!-- STATS -->
 <section class="stats">
-  <div class="stat-card animate-1">
-    <div class="stat-value">+30%</div>
-    <div class="stat-label">Aumento de conversão</div>
-  </div>
-  <div class="stat-card animate-2">
-    <div class="stat-value">−40%</div>
-    <div class="stat-label">Redução de trocas</div>
+  <div class="stat-card reveal"><div class="stat-value" data-target="30" data-suffix="%+">0%</div><div class="stat-label">Aumento de conversão</div></div>
+  <div class="stat-card reveal"><div class="stat-value" data-target="40" data-prefix="−" data-suffix="%">0%</div><div class="stat-label">Redução de trocas</div></div>
+  <div class="stat-card reveal"><div class="stat-value" data-target="5" data-suffix="s">0s</div><div class="stat-label">Tempo médio de resultado</div></div>
+  <div class="stat-card reveal"><div class="stat-value" data-target="98" data-suffix="%">0%</div><div class="stat-label">Satisfação dos usuários</div></div>
+</section>
+ 
+<div class="divider"></div>
+ 
+<!-- DEPOIMENTOS -->
+<section class="testimonials">
+  <p class="section-eyebrow reveal">Depoimentos</p>
+  <h2 class="section-title reveal">O que dizem os <span>clientes</span></h2>
+  <div class="testimonial-list">
+    <div class="testimonial-card reveal">
+      <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      <p class="testimonial-text">"Desde que implantamos a Dresyn AI, nossas devoluções por tamanho caíram 38%. Os clientes chegam mais seguros na hora de comprar."</p>
+      <div class="testimonial-author"><div class="author-avatar">MR</div><div><div class="author-name">Mariana R.</div><div class="author-role">Diretora de E-commerce</div></div></div>
+    </div>
+    <div class="testimonial-card reveal">
+      <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      <p class="testimonial-text">"Incrível como a IA capta o caimento da peça com precisão. Nosso ticket médio aumentou porque as pessoas experimentam mais itens."</p>
+      <div class="testimonial-author"><div class="author-avatar">LP</div><div><div class="author-name">Lucas P.</div><div class="author-role">Fundador — Loja de Moda</div></div></div>
+    </div>
   </div>
 </section>
-
+ 
 <div class="divider"></div>
-
+ 
+<!-- FAQ -->
+<section class="faq">
+  <p class="section-eyebrow reveal">Dúvidas</p>
+  <h2 class="section-title reveal">Perguntas <span>frequentes</span></h2>
+  <div class="faq-list">
+    <div class="faq-item reveal"><div class="faq-question" onclick="toggleFaq(this)">Preciso instalar algum aplicativo?<span class="faq-icon">+</span></div><div class="faq-answer">Não. A Dresyn AI funciona 100% no navegador, sem downloads, sem cadastro obrigatório e sem configurações complexas.</div></div>
+    <div class="faq-item reveal"><div class="faq-question" onclick="toggleFaq(this)">Minha foto fica salva nos servidores?<span class="faq-icon">+</span></div><div class="faq-answer">Não. As imagens são processadas em tempo real e descartadas imediatamente após a geração do resultado.</div></div>
+    <div class="faq-item reveal"><div class="faq-question" onclick="toggleFaq(this)">Funciona com qualquer tipo de roupa?<span class="faq-icon">+</span></div><div class="faq-answer">Sim. Nossa IA é treinada para camisetas, vestidos, casacos, calças e acessórios. O resultado é preciso independente da peça.</div></div>
+    <div class="faq-item reveal"><div class="faq-question" onclick="toggleFaq(this)">Como integro ao meu e-commerce?<span class="faq-icon">+</span></div><div class="faq-answer">Em minutos, via snippet de código. Temos plugins prontos para Shopify, WooCommerce e integrações via API para plataformas customizadas.</div></div>
+  </div>
+</section>
+ 
+<div class="divider"></div>
+ 
+<!-- CTA FINAL -->
+<section class="cta-section reveal" style="position:relative">
+  <div class="cta-glow"></div>
+  <h2>Pronto para <span>transformar</span> suas vendas?</h2>
+  <p>Experimente agora mesmo o provador virtual e veja a diferença que a IA faz no seu negócio.</p>
+  <button class="btn-primary" onclick="document.querySelector('.demo').scrollIntoView({behavior:'smooth'})" style="max-width:260px;margin:0 auto">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    Experimentar agora
+  </button>
+</section>
+ 
+<div class="divider"></div>
+ 
 <!-- CLIENTS -->
-<section class="clients" style="padding-top:40px">
+<section class="clients reveal" style="padding-top:40px">
   <p class="clients-label">Empresas que já utilizam</p>
   <div class="client-logos">
     <img src="Golpe.png" alt="Cliente 1">
     <img src="Travel.png" alt="Cliente 2">
   </div>
 </section>
-
+ 
 <!-- FOOTER -->
 <footer>
   <span class="footer-copy">© 2026 Dresyn AI</span>
-  <span class="footer-patent">Tecnologia proprietária com patente</span>
+  <div class="footer-links">
+    <a href="#" class="footer-link">Privacidade</a>
+    <a href="#" class="footer-link">Termos</a>
+    <a href="#" class="footer-link">Contato</a>
+  </div>
 </footer>
-
-<!-- MODAL BOTTOM SHEET -->
+ 
+<!-- MODAL -->
 <div id="leadModal">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
     <h2 class="modal-title">Quase lá — <span>veja o resultado</span></h2>
     <p class="modal-desc">Informe seu contato para liberar a simulação e receber novidades.</p>
-
-    <div class="input-group">
-      <input
-        class="input-field"
-        type="text"
-        id="leadContato"
-        placeholder="E-mail ou WhatsApp"
-        autocomplete="off"
-      >
-    </div>
-
+    <div class="input-group"><input class="input-field" type="text" id="leadContato" placeholder="E-mail ou WhatsApp" autocomplete="off"></div>
     <p class="modal-terms">Ao continuar, você concorda em receber comunicações da Dresyn AI. Sem spam.</p>
-
-    <button class="btn-primary" onclick="liberarImagem()">
-      Ver resultado
-    </button>
+    <button class="btn-primary" onclick="liberarImagem()">Ver resultado</button>
   </div>
 </div>
-
+ 
 <script>
   function handleFile(input, zoneId, previewId) {
-    const file = input.files[0];
-    if (!file) return;
+    const file = input.files[0]; if (!file) return;
     const zone = document.getElementById(zoneId);
     const preview = document.getElementById(previewId);
     zone.classList.add('has-file');
@@ -597,91 +409,91 @@
     reader.onload = e => { preview.src = e.target.result; };
     reader.readAsDataURL(file);
   }
-
+ 
   async function testarProvador() {
     const personFile   = document.getElementById('personImage').files[0];
     const clothingFile = document.getElementById('clothingImage').files[0];
-
-    if (!personFile || !clothingFile) {
-      alert('Envie as duas imagens para continuar.');
-      return;
-    }
-
-    const btn     = document.getElementById('btnTryon');
+    if (!personFile || !clothingFile) { alert('Envie as duas imagens para continuar.'); return; }
+    const btn = document.getElementById('btnTryon');
     const loading = document.getElementById('loading');
-
-    btn.disabled          = true;
-    loading.style.display = 'flex';
-
+    btn.disabled = true; loading.style.display = 'flex';
     const formData = new FormData();
     formData.append('model', personFile);
     formData.append('item',  clothingFile);
-
     try {
-      const response = await fetch('https://glpofficial-api.onrender.com/api/tryon', {
-        method: 'POST',
-        body:   formData
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-
+      const response = await fetch('https://glpofficial-api.onrender.com/api/tryon', { method: 'POST', body: formData });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
-
-      // aceita data.image ou data.output (base64 ou URL)
       const imagem = data.image || data.output || data.result || null;
-
-      if (imagem) {
-        window.imagemGerada = imagem;
-        document.getElementById('leadModal').style.display = 'flex';
-      } else {
-        alert('A API não retornou uma imagem. Verifique o servidor.');
-        console.error('Resposta da API:', data);
-      }
-
+      if (imagem) { window.imagemGerada = imagem; document.getElementById('leadModal').style.display = 'flex'; }
+      else { alert('A API não retornou uma imagem. Verifique o servidor.'); }
     } catch (err) {
       console.error('Erro no provador:', err);
       alert('Erro ao conectar com a API. Verifique se o servidor está ativo e se CORS está liberado.');
     }
-
-    loading.style.display = 'none';
-    btn.disabled          = false;
+    loading.style.display = 'none'; btn.disabled = false;
   }
-
+ 
   function liberarImagem() {
     const contato = document.getElementById('leadContato').value.trim();
-    if (!contato) {
-      document.getElementById('leadContato').focus();
-      return;
-    }
-
+    if (!contato) { document.getElementById('leadContato').focus(); return; }
     salvarLead(contato);
-
     const wrapper = document.getElementById('resultWrapper');
-    const img = document.getElementById('resultImage');
-    img.src = window.imagemGerada;
+    document.getElementById('resultImage').src = window.imagemGerada;
     wrapper.style.display = 'block';
-
     document.getElementById('leadModal').style.display = 'none';
-
-    setTimeout(() => {
-      wrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 100);
+    setTimeout(() => wrapper.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
   }
-
+ 
   function salvarLead(contato) {
     fetch('https://glpofficial-api.onrender.com/api/lead', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ contato, origem: 'provador_virtual', data: new Date() })
     }).catch(() => {});
   }
-
-  // Fechar modal ao clicar fora
+ 
   document.getElementById('leadModal').addEventListener('click', function(e) {
     if (e.target === this) this.style.display = 'none';
   });
+ 
+  function toggleFaq(el) {
+    const item = el.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+ 
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 70);
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+ 
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) { animateCounter(entry.target); counterObserver.unobserve(entry.target); }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.stat-value[data-target]').forEach(el => counterObserver.observe(el));
+ 
+  function animateCounter(el) {
+    const target = parseInt(el.dataset.target);
+    const suffix = el.dataset.suffix || '';
+    const prefix = el.dataset.prefix || '';
+    const start  = performance.now();
+    function update(now) {
+      const p = Math.min((now - start) / 1400, 1);
+      const e = 1 - Math.pow(1 - p, 3);
+      el.textContent = prefix + Math.round(e * target) + suffix;
+      if (p < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  }
 </script>
 </body>
 </html>
+ 
