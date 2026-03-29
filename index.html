@@ -1,3 +1,6 @@
+
+Google Chrome
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -211,6 +214,13 @@
   .input-field:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(0,255,204,0.08); }
   .modal-terms { font-size:11px; color:var(--text-dim); line-height:1.5; margin-bottom:20px; margin-top:4px; }
  
+  /* ─── VALIDAÇÃO ──────────────────────────────────────────── */
+  .input-error   { border-color:#ff4444 !important; box-shadow:0 0 0 3px rgba(255,68,68,0.12) !important; }
+  .input-success { border-color:var(--primary) !important; box-shadow:0 0 0 3px rgba(0,255,204,0.10) !important; }
+  .field-msg { font-size:11px; margin-top:6px; padding-left:2px; min-height:16px; }
+  .field-msg.error { color:#ff6666; }
+  .field-msg.ok    { color:var(--primary); }
+ 
   @media (max-width:400px) { .features-grid { grid-template-columns:1fr; } .nav-links { display:none; } }
 </style>
 </head>
@@ -393,7 +403,10 @@
     <div class="modal-handle"></div>
     <h2 class="modal-title">Quase lá — <span>veja o resultado</span></h2>
     <p class="modal-desc">Informe seu contato para liberar a simulação e receber novidades.</p>
-    <div class="input-group"><input class="input-field" type="text" id="leadContato" placeholder="E-mail ou WhatsApp" autocomplete="off"></div>
+    <div class="input-group">
+      <input class="input-field" type="text" id="leadContato" placeholder="E-mail ou WhatsApp (ex: 11999998888)" autocomplete="off" oninput="validarContato(this)">
+      <div class="field-msg" id="fieldMsg"></div>
+    </div>
     <p class="modal-terms">Ao continuar, você concorda em receber comunicações da Dresyn AI. Sem spam.</p>
     <button class="btn-primary" onclick="liberarImagem()">Ver resultado</button>
   </div>
@@ -434,9 +447,39 @@
     loading.style.display = 'none'; btn.disabled = false;
   }
  
+  /* ── Validação ───────────────────────────────────────────── */
+  function isEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
+  function isWhatsApp(v) { const d = v.replace(/\D/g,''); return d.length >= 10 && d.length <= 11; }
+ 
+  function validarContato(input) {
+    const val = input.value.trim();
+    const msg = document.getElementById('fieldMsg');
+    input.classList.remove('input-error','input-success');
+    msg.className = 'field-msg'; msg.textContent = '';
+    if (!val) return;
+    if (isEmail(val)) {
+      input.classList.add('input-success'); msg.classList.add('ok'); msg.textContent = '✓ E-mail válido';
+    } else if (isWhatsApp(val)) {
+      input.classList.add('input-success'); msg.classList.add('ok'); msg.textContent = '✓ WhatsApp válido';
+    } else if (val.includes('@')) {
+      input.classList.add('input-error'); msg.classList.add('error'); msg.textContent = 'E-mail inválido. Ex: nome@dominio.com';
+    } else {
+      input.classList.add('input-error'); msg.classList.add('error'); msg.textContent = 'Número inválido. Use DDD + número (ex: 11999998888)';
+    }
+  }
+ 
   function liberarImagem() {
-    const contato = document.getElementById('leadContato').value.trim();
-    if (!contato) { document.getElementById('leadContato').focus(); return; }
+    const input   = document.getElementById('leadContato');
+    const contato = input.value.trim();
+    const msg     = document.getElementById('fieldMsg');
+    if (!contato) {
+      input.classList.add('input-error'); msg.className = 'field-msg error';
+      msg.textContent = 'Preencha seu e-mail ou WhatsApp para continuar.'; input.focus(); return;
+    }
+    if (!isEmail(contato) && !isWhatsApp(contato)) {
+      input.classList.add('input-error'); msg.className = 'field-msg error';
+      msg.textContent = 'Informe um e-mail ou WhatsApp válido.'; input.focus(); return;
+    }
     salvarLead(contato);
     const wrapper = document.getElementById('resultWrapper');
     document.getElementById('resultImage').src = window.imagemGerada;
@@ -446,9 +489,15 @@
   }
  
   function salvarLead(contato) {
+    const tipo  = isEmail(contato) ? 'email' : 'whatsapp';
+    /* Salva no localStorage para o painel admin */
+    const leads = JSON.parse(localStorage.getItem('dresyn_leads') || '[]');
+    leads.unshift({ contato, tipo, data: new Date().toISOString() });
+    localStorage.setItem('dresyn_leads', JSON.stringify(leads));
+    /* Envia para a API */
     fetch('https://glpofficial-api.onrender.com/api/lead', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contato, origem: 'provador_virtual', data: new Date() })
+      body: JSON.stringify({ contato, tipo, origem: 'provador_virtual', data: new Date() })
     }).catch(() => {});
   }
  
