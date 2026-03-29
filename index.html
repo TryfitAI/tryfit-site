@@ -210,14 +210,14 @@
   .input-field::placeholder { color:var(--text-muted); }
   .input-field:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(0,255,204,0.08); }
   .modal-terms { font-size:11px; color:var(--text-dim); line-height:1.5; margin-bottom:20px; margin-top:4px; }
-
+ 
   /* ─── VALIDAÇÃO ──────────────────────────────────────────── */
   .input-error   { border-color:#ff4444 !important; box-shadow:0 0 0 3px rgba(255,68,68,0.12) !important; }
   .input-success { border-color:var(--primary) !important; box-shadow:0 0 0 3px rgba(0,255,204,0.10) !important; }
   .field-msg { font-size:11px; margin-top:6px; padding-left:2px; min-height:16px; }
   .field-msg.error { color:#ff6666; }
   .field-msg.ok    { color:var(--primary); }
-
+ 
   @media (max-width:400px) { .features-grid { grid-template-columns:1fr; } .nav-links { display:none; } }
 </style>
 </head>
@@ -336,7 +336,7 @@
     <div class="testimonial-card reveal">
       <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
       <p class="testimonial-text">"Desde que implantamos a Dresyn AI, nossas devoluções por tamanho caíram 38%. Os clientes chegam mais seguros na hora de comprar."</p>
-      <div class="testimonial-author"><div class="author-avatar" style="background:none;padding:0;overflow:hidden"><img src="https://i.imgur.com/7UpKraI.jpg" alt="Alisson de Oliveira" style="width:100%;height:100%;object-fit:cover;border-radius:50%"></div><div><div class="author-name">Alisson de Oliveira</div><div class="author-role">Diretora de E-commerce</div></div></div>
+      <div class="testimonial-author"><div class="author-avatar" style="background:none;padding:0;overflow:hidden"><img src="https://i.imgur.com/YeyXYun.jpg" alt="Alisson de Oliveira" style="width:100%;height:100%;object-fit:cover;border-radius:50%"></div><div><div class="author-name">Alisson de Oliveira</div><div class="author-role">Diretora de E-commerce</div></div></div>
     </div>
     <div class="testimonial-card reveal">
       <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
@@ -356,7 +356,7 @@
     <div class="faq-item reveal"><div class="faq-question" onclick="toggleFaq(this)">Preciso instalar algum aplicativo?<span class="faq-icon">+</span></div><div class="faq-answer">Não. A Dresyn AI funciona 100% no navegador, sem downloads, sem cadastro obrigatório e sem configurações complexas.</div></div>
     <div class="faq-item reveal"><div class="faq-question" onclick="toggleFaq(this)">Minha foto fica salva nos servidores?<span class="faq-icon">+</span></div><div class="faq-answer">Não. As imagens são processadas em tempo real e descartadas imediatamente após a geração do resultado.</div></div>
     <div class="faq-item reveal"><div class="faq-question" onclick="toggleFaq(this)">Funciona com qualquer tipo de roupa?<span class="faq-icon">+</span></div><div class="faq-answer">Sim. Nossa IA é treinada para camisetas, vestidos, casacos, calças e acessórios. O resultado é preciso independente da peça.</div></div>
-
+ 
   </div>
 </section>
  
@@ -447,7 +447,7 @@
   /* ── Validação ───────────────────────────────────────────── */
   function isEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
   function isWhatsApp(v) { const d = v.replace(/\D/g,''); return d.length >= 10 && d.length <= 11; }
-
+ 
   function validarContato(input) {
     const val = input.value.trim();
     const msg = document.getElementById('fieldMsg');
@@ -464,7 +464,7 @@
       input.classList.add('input-error'); msg.classList.add('error'); msg.textContent = 'Número inválido. Use DDD + número (ex: 11999998888)';
     }
   }
-
+ 
   function liberarImagem() {
     const input   = document.getElementById('leadContato');
     const contato = input.value.trim();
@@ -542,3 +542,4 @@
 </script>
 </body>
 </html>
+ 
